@@ -11,6 +11,12 @@ LOG_FILE='/tmp/ngrok.log'
 TELEGRAM_LOG="/tmp/telegram.log"
 CONTINUE_FILE="/tmp/continue"
 
+echo "---sshd_config Fixed---------------------------------------------------------------------"
+cat /etc/ssh/sshd_config
+# restart ssh
+systemctl restart ssh
+systemctl status ssh
+
 if [[ -z "${NPC_ARGS}" ]]; then
     echo -e "${ERROR} Please set 'NPC_ARGS' environment variable."
     exit 2
@@ -31,9 +37,9 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     npc -version
     sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-    
     echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
+    cat /etc/ssh/sshd_config
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo -e "${INFO} Install ngrok ..."
     curl -fsSL https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip -o ngrok.zip
@@ -71,7 +77,7 @@ ERRORS_LOG=$(netstat -nlp | grep npc)
 
 
     SSH_CMD="ssh hello with npc"
-    cat /etc/ssh/sshd_config
+    
     MSG="
 *GitHub Actions - ngrok session info:*
 
@@ -95,7 +101,7 @@ Run '\`touch ${CONTINUE_FILE}\`' to continue to the next step.
             echo -e "${INFO} Telegram message sent successfully!"
         fi
     fi
-    while ((${PRT_COUNT:=1} <= ${PRT_TOTAL:=2})); do
+    while ((${PRT_COUNT:=1} <= ${PRT_TOTAL:=10})); do
         SECONDS_LEFT=${PRT_INTERVAL_SEC:=10}
         while ((${PRT_COUNT} > 1)) && ((${SECONDS_LEFT} > 0)); do
             echo -e "${INFO} (${PRT_COUNT}/${PRT_TOTAL}) Please wait ${SECONDS_LEFT}s ..."
