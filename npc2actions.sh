@@ -28,16 +28,16 @@ if [[ -z "${SSH_PASSWORD}" && -z "${SSH_PUBKEY}" && -z "${GH_SSH_PUBKEY}" ]]; th
 fi
 
 if [[ -n "$(uname | grep -i Linux)" ]]; then
-    echo -e "${INFO} Install NPC ..."
+    echo "${INFO} Install NPC ..."
     curl -fsSL https://github.com/ehang-io/nps/releases/download/v0.26.10/linux_amd64_client.tar.gz -o npc.tar.gz
     tar xzf npc.tar.gz
     rm npc.tar.gz
     chmod +x npc
     sudo mv npc /usr/local/bin
     npc -version
-    sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
-    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+    sudo sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+    sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
 
     cat /etc/ssh/sshd_config
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
@@ -59,8 +59,8 @@ else
 fi
 
 if [[ -n "${SSH_PASSWORD}" ]]; then
-    echo -e "${INFO} Set user(${USER}) password ..."
-    echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
+    echo "${INFO} Set user(${USER}) password ..."
+    echo "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
 fi
 
 echo -e "${INFO} Start NPC proxy for SSH port..."
