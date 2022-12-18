@@ -37,8 +37,7 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
 
     # restart ssh
-    systemctl restart ssh
-    systemctl status ssh
+    sudo systemctl restart ssh
     echo "---sshd_config Fixed---------------------------------------------------------------------"
     cat /etc/ssh/sshd_config
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
