@@ -11,11 +11,8 @@ LOG_FILE='/tmp/ngrok.log'
 TELEGRAM_LOG="/tmp/telegram.log"
 CONTINUE_FILE="/tmp/continue"
 
-echo "---sshd_config Fixed---------------------------------------------------------------------"
-cat /etc/ssh/sshd_config
-# restart ssh
-systemctl restart ssh
-systemctl status ssh
+
+
 
 if [[ -z "${NPC_ARGS}" ]]; then
     echo -e "${ERROR} Please set 'NPC_ARGS' environment variable."
@@ -39,6 +36,10 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
 
+    # restart ssh
+    systemctl restart ssh
+    systemctl status ssh
+    echo "---sshd_config Fixed---------------------------------------------------------------------"
     cat /etc/ssh/sshd_config
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo -e "${INFO} Install ngrok ..."
@@ -59,8 +60,8 @@ else
 fi
 
 if [[ -n "${SSH_PASSWORD}" ]]; then
-    echo "${INFO} Set user(${USER}) password ..."
-    echo "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
+    echo -e "${INFO} Set user(${USER}) password ..."
+    echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
 fi
 
 echo -e "${INFO} Start NPC proxy for SSH port..."
