@@ -60,6 +60,7 @@ else
 fi
 
 if [[ -n "${SSH_PASSWORD}" ]]; then
+    USER=root
     echo -e "${INFO} Set user(${USER}) password ..."
     echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
 fi
