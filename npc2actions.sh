@@ -12,7 +12,7 @@ TELEGRAM_LOG="/tmp/telegram.log"
 CONTINUE_FILE="/tmp/continue"
 
 if [[ -z "${NPC_ARGS}" ]]; then
-    echo -e "${ERROR} Please set 'NGROK_TOKEN' environment variable."
+    echo -e "${ERROR} Please set 'NPC_ARGS' environment variable."
     exit 2
 fi
 
