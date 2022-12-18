@@ -17,7 +17,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Start SSH via tmate
-        uses: kenxp/ssh2actions@master
+        uses: kenxp/ssh2actions@main
         # Send connection info to Telegram (optional)
         # You can find related documents here: https://core.telegram.org/bots
         env:
