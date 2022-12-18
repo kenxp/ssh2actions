@@ -28,7 +28,12 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     rm npc.tar.gz
     chmod +x npc
     sudo mv npc /usr/local/bin
-    npc -v
+    npc -version
+    sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo -e "${INFO} Install ngrok ..."
     curl -fsSL https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip -o ngrok.zip
@@ -52,8 +57,8 @@ if [[ -n "${SSH_PASSWORD}" ]]; then
     echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
 fi
 
-echo -e "${INFO} Start ngrok proxy for SSH port..."
-screen -dmS ngrok \
+echo -e "${INFO} Start NPC proxy for SSH port..."
+screen -dmS npcscreen \
     npc ${NPC_ARGS}
 
 while ((${SECONDS_LEFT:=10} > 0)); do
@@ -62,7 +67,7 @@ while ((${SECONDS_LEFT:=10} > 0)); do
     SECONDS_LEFT=$((${SECONDS_LEFT} - 1))
 done
 
-ERRORS_LOG=$(grep "command failed" ${LOG_FILE})
+ERRORS_LOG=$(netstat -nlp | grep npc)
 
 
     SSH_CMD="ssh hello with npc"
@@ -90,7 +95,7 @@ Run '\`touch ${CONTINUE_FILE}\`' to continue to the next step.
             echo -e "${INFO} Telegram message sent successfully!"
         fi
     fi
-    while ((${PRT_COUNT:=1} <= ${PRT_TOTAL:=10})); do
+    while ((${PRT_COUNT:=1} <= ${PRT_TOTAL:=2})); do
         SECONDS_LEFT=${PRT_INTERVAL_SEC:=10}
         while ((${PRT_COUNT} > 1)) && ((${SECONDS_LEFT} > 0)); do
             echo -e "${INFO} (${PRT_COUNT}/${PRT_TOTAL}) Please wait ${SECONDS_LEFT}s ..."
