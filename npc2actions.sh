@@ -35,11 +35,11 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     sudo sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
     sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
+    echo 'ListenAddress 0.0.0.0' | sudo tee -a /etc/ssh/sshd_config >/dev/null
 
     # restart ssh
     sudo systemctl restart ssh
-    echo "---sshd_config Fixed---------------------------------------------------------------------"
-    cat /etc/ssh/sshd_config
+
 elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     echo -e "${INFO} Install ngrok ..."
     curl -fsSL https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-darwin-amd64.zip -o ngrok.zip
@@ -64,6 +64,9 @@ if [[ -n "${SSH_PASSWORD}" ]]; then
     echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
 fi
 
+# get the ip 
+ERRORS_LOG=$(ifconfig | grep 'inet 10.')
+
 echo -e "${INFO} Start NPC proxy for SSH port..."
 screen -dmS npcscreen \
     npc ${NPC_ARGS}
@@ -74,10 +77,10 @@ while ((${SECONDS_LEFT:=10} > 0)); do
     SECONDS_LEFT=$((${SECONDS_LEFT} - 1))
 done
 
-ERRORS_LOG=$(netstat -nlp | grep npc)
 
 
-    SSH_CMD="ssh hello with npc"
+
+    SSH_CMD=$(ifconfig | grep 'inet 10.')
     
     MSG="
 *GitHub Actions - ngrok session info:*
