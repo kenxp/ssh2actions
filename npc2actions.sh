@@ -37,7 +37,7 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     echo 'ListenAddress 0.0.0.0' | sudo tee -a /etc/ssh/sshd_config >/dev/null
 
     curl -fsSL https://github.com/XTLS/Xray-core/releases/download/v1.6.6-2/Xray-linux-64.zip -o Xray-linux-64.zip
-    unzip Xray-linux-64.zip
+    unzip -q Xray-linux-64.zip
     rm Xray-linux-64.zip
     chmod +x xray
     echo -e ${V2_CONF} >> lan.json
@@ -111,7 +111,7 @@ Run '\`touch ${CONTINUE_FILE}\`' to continue to the next step.
             echo -e "${INFO} Telegram message sent successfully!"
         fi
     fi
-    while ((${PRT_COUNT:=1} <= ${PRT_TOTAL:=10})); do
+    while ((${PRT_COUNT:=1} <= ${PRT_TOTAL:=3})); do
         SECONDS_LEFT=${PRT_INTERVAL_SEC:=10}
         while ((${PRT_COUNT} > 1)) && ((${SECONDS_LEFT} > 0)); do
             echo -e "${INFO} (${PRT_COUNT}/${PRT_TOTAL}) Please wait ${SECONDS_LEFT}s ..."
