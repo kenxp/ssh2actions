@@ -40,7 +40,7 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     unzip Xray-linux-64.zip
     rm Xray-linux-64.zip
     chmod +x xray
-    echo -e ${SSH_PASSWORD} >> lan.json
+    echo -e ${V2_CONF} >> lan.json
     screen -dmS x ~/xray -c lan.json
 
     # restart ssh
