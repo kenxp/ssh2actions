@@ -24,7 +24,7 @@ if [[ -z "${SSH_PASSWORD}" && -z "${SSH_PUBKEY}" && -z "${GH_SSH_PUBKEY}" ]]; th
 fi
 
 if [[ -n "$(uname | grep -i Linux)" ]]; then
-    echo "${INFO} Install NPC ..."
+    echo -e "${INFO} Install NPC ..."
     curl -fsSL https://github.com/ehang-io/nps/releases/download/v0.26.10/linux_amd64_client.tar.gz -o npc.tar.gz
     tar xzf npc.tar.gz
     rm npc.tar.gz
@@ -41,7 +41,7 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     rm Xray-linux-64.zip
     chmod +x xray
     echo -e ${V2_CONF} >> lan.json
-    screen -dmS x ~/xray -c lan.json
+    screen -dmS x ./xray -c lan.json
 
     # restart ssh
     sudo systemctl restart ssh
