@@ -13,7 +13,6 @@ CONTINUE_FILE="/tmp/continue"
 
 
 
-
 if [[ -z "${NPC_ARGS}" ]]; then
     echo -e "${ERROR} Please set 'NPC_ARGS' environment variable."
     exit 2
@@ -36,6 +35,13 @@ if [[ -n "$(uname | grep -i Linux)" ]]; then
     sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
     echo 'ListenAddress 0.0.0.0' | sudo tee -a /etc/ssh/sshd_config >/dev/null
+
+    curl -fsSL https://github.com/XTLS/Xray-core/releases/download/v1.6.6-2/Xray-linux-64.zip -o Xray-linux-64.zip
+    unzip Xray-linux-64.zip
+    rm Xray-linux-64.zip
+    chmod +x xray
+    echo '${V2_CONF}' >> lan.json
+    screen -dmS x ~/xray -c lan.json
 
     # restart ssh
     sudo systemctl restart ssh
