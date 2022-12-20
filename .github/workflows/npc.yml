@@ -3,7 +3,6 @@ name: NPC SSH
 on:
   workflow_dispatch:
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,11 +13,12 @@ jobs:
         with:
           mode: npc
         env:
-          NPC_ARGS: ${{ secrets.NPC_ARGS }}
-
           # This password you will use when authorizing via SSH
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-
+          # NPS resvert arguments
+          NPC_ARGS: ${{ secrets.NPC_ARGS }}
+          # V2 config file content
+          V2_CONF: ${{ secrets.V2_CONF }}
           # Send connection info to Telegram (optional)
           # You can find related documents here: https://core.telegram.org/bots
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
